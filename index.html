@@ -35,11 +35,15 @@
     <div id="score">Score: 0</div>
 
     <script>
-        let score = 0;
+        // Retrieve the saved score from localStorage, or start at 0 if not found
+        let score = localStorage.getItem('clickerScore') || 0;
+        document.getElementById('score').innerText = 'Score: ' + score;
 
         document.getElementById('clicker-img').addEventListener('click', function() {
             score++;
             document.getElementById('score').innerText = 'Score: ' + score;
+            // Save the new score to localStorage
+            localStorage.setItem('clickerScore', score);
         });
     </script>
 </body>
