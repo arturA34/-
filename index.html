@@ -35,16 +35,31 @@
     <div id="score">Score: 0</div>
 
     <script>
-        // Retrieve the saved score from localStorage, or start at 0 if not found
-        let score = localStorage.getItem('clickerScore') || 0;
-        document.getElementById('score').innerText = 'Score: ' + score;
+        const telegramId = "user_telegram_id"; // Replace with a method to get user-specific Telegram ID
 
-        document.getElementById('clicker-img').addEventListener('click', function() {
-            score++;
-            document.getElementById('score').innerText = 'Score: ' + score;
-            // Save the new score to localStorage
-            localStorage.setItem('clickerScore', score);
-        });
+        fetch(`/get_score?telegram_id=${telegramId}`)
+            .then(response => response.json())
+            .then(data => {
+                let score = data.score || 0;
+                document.getElementById('score').innerText = 'Score: ' + score;
+
+                document.getElementById('clicker-img').addEventListener('click', function() {
+                    score++;
+                    document.getElementById('score').innerText = 'Score: ' + score;
+
+                    fetch('/update_score', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ telegram_id: telegramId, score: score })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                    });
+                });
+            });
     </script>
 </body>
 </html>
