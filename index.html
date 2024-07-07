@@ -1,73 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clicker Game</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        #clicker-img {
-            width: 200px;
-            height: 200px;
-            cursor: pointer;
-        }
-        #score {
-            margin-top: 20px;
-            font-size: 24px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Игра Кликер</title>
+<style>
+  body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+  .background {
+    background-image: url('habitat.png');
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  .clicker {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .hippo-coin {
+    height: auto; /* Автоматический размер по высоте */
+    width: 20%; /* Ширина картинки в процентах для адаптивности */
+    max-width: 100px; /* Максимальная ширина картинки */
+    cursor: pointer;
+  }
+</style>
 </head>
 <body>
-    <h1>Clicker Game</h1>
-    <img id="clicker-img" src="hippo_coin.png" alt="Click Me!">
-    <div id="score">Score: 0</div>
+<div class="background">
+  <div class="clicker">
+    <img src="hippo_coin.png" class="hippo-coin" onclick="addPoint()" alt="Hippo Coin">
+  </div>
+  <div id="score" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; top: 20px;">Баллы: 0</div>
+</div>
+<script>
+  var score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
+  document.getElementById('score').innerText = 'Баллы: ' + score;
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const telegramId = 'test_id'; // Идентификатор пользователя в Telegram Mini App
+  function addPoint() {
+    score++;
+    document.getElementById('score').innerText = 'Баллы: ' + score;
+    localStorage.setItem('score', score);
+  }
 
-            if (telegramId) {
-                console.log('Telegram ID:', telegramId);
-
-                fetchScore(telegramId);
-
-                document.getElementById('clicker-img').addEventListener('click', () => {
-                    let currentScore = parseInt(document.getElementById('score').innerText.split(': ')[1]);
-                    currentScore++;
-                    updateScore(telegramId, currentScore);
-                });
-            } else {
-                console.error('Telegram ID not provided.');
-            }
-        });
-
-        function fetchScore(telegramId) {
-            // Запрос на получение счета игрока
-            // Вместо использования fetch() для запросов, используйте API Telegram Mini Apps
-            // Необходимо отправлять запросы к API Telegram для получения и обновления данных
-            // Примерно так: telegramApi.getScore(telegramId).then(data => { ... });
-        }
-
-        function updateScore(telegramId, score) {
-            // Запрос на обновление счета игрока
-            // Аналогично, используйте API Telegram Mini Apps для обновления данных
-            // Примерно так: telegramApi.updateScore(telegramId, score).then(data => { ... });
-            
-            // После успешного обновления счета, обновите отображение счета на странице
-            document.getElementById('score').innerText = 'Score: ' + score;
-        }
-    </script>
+  window.onbeforeunload = function() {
+    localStorage.setItem('score', score);
+  };
+</script>
 </body>
 </html>
