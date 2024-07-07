@@ -35,16 +35,39 @@
     <div id="score">Score: 0</div>
 
     <script>
-        // Retrieve the saved score from localStorage, or start at 0 if not found
-        let score = localStorage.getItem('clickerScore') || 0;
-        document.getElementById('score').innerText = 'Score: ' + score;
+        document.addEventListener('DOMContentLoaded', () => {
+            const telegramId = 'test_id'; // Идентификатор пользователя в Telegram Mini App
 
-        document.getElementById('clicker-img').addEventListener('click', function() {
-            score++;
-            document.getElementById('score').innerText = 'Score: ' + score;
-            // Save the new score to localStorage
-            localStorage.setItem('clickerScore', score);
+            if (telegramId) {
+                console.log('Telegram ID:', telegramId);
+
+                fetchScore(telegramId);
+
+                document.getElementById('clicker-img').addEventListener('click', () => {
+                    let currentScore = parseInt(document.getElementById('score').innerText.split(': ')[1]);
+                    currentScore++;
+                    updateScore(telegramId, currentScore);
+                });
+            } else {
+                console.error('Telegram ID not provided.');
+            }
         });
+
+        function fetchScore(telegramId) {
+            // Запрос на получение счета игрока
+            // Вместо использования fetch() для запросов, используйте API Telegram Mini Apps
+            // Необходимо отправлять запросы к API Telegram для получения и обновления данных
+            // Примерно так: telegramApi.getScore(telegramId).then(data => { ... });
+        }
+
+        function updateScore(telegramId, score) {
+            // Запрос на обновление счета игрока
+            // Аналогично, используйте API Telegram Mini Apps для обновления данных
+            // Примерно так: telegramApi.updateScore(telegramId, score).then(data => { ... });
+            
+            // После успешного обновления счета, обновите отображение счета на странице
+            document.getElementById('score').innerText = 'Score: ' + score;
+        }
     </script>
 </body>
 </html>
