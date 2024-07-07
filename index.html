@@ -35,31 +35,12 @@
     <div id="score">Score: 0</div>
 
     <script>
-        const telegramId = "user_telegram_id"; // Replace with a method to get user-specific Telegram ID
+        let score = 0;
 
-        fetch(`/get_score?telegram_id=${telegramId}`)
-            .then(response => response.json())
-            .then(data => {
-                let score = data.score || 0;
-                document.getElementById('score').innerText = 'Score: ' + score;
-
-                document.getElementById('clicker-img').addEventListener('click', function() {
-                    score++;
-                    document.getElementById('score').innerText = 'Score: ' + score;
-
-                    fetch('/update_score', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({ telegram_id: telegramId, score: score })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data.message);
-                    });
-                });
-            });
+        document.getElementById('clicker-img').addEventListener('click', function() {
+            score++;
+            document.getElementById('score').innerText = 'Score: ' + score;
+        });
     </script>
 </body>
 </html>
