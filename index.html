@@ -26,7 +26,7 @@
   .hippo-coin {
     height: auto; /* Автоматический размер по высоте */
     width: 90%; /* Ширина картинки в процентах для адаптивности */
-    max-width: 150px; /* Максимальная ширина картинки */
+    max-width: 230px; /* Максимальная ширина картинки */
     cursor: pointer;
   }
 </style>
@@ -51,6 +51,27 @@
   window.onbeforeunload = function() {
     localStorage.setItem('score', score);
   };
+  function addPoint() {
+    score++;
+    document.getElementById('score').innerText = 'Баллы: ' + score;
+    localStorage.setItem('score', score);
+
+    // Отправляем score на сервер, вот тут либо 2 / либо 1!!!
+    fetch('https://artura34.pythonanywhere.com//save_score', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ telegram_id: 'telegram_id', score: score }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('Score saved:', data);
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+  }
 </script>
 </body>
 </html>
