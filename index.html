@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Игра Кликер</title>
 <style>
-  body, html {
+body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
@@ -39,30 +39,39 @@
   <div id="score" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; top: 20px;">Баллы: 0</div>
 </div>
 <script>
+  // Извлекаем telegram_id из URL и сохраняем в localStorage
+  document.addEventListener('DOMContentLoaded', function() {
+    var urlParams = new URLSearchParams(window.location.search);
+    var telegramId = urlParams.get('telegram_id');
+    if (telegramId) {
+      localStorage.setItem('telegram_id', telegramId);
+    }
+  });
+
+  // Получаем сохраненный ранее score
   var score = localStorage.getItem('score') ? parseInt(localStorage.getItem('score')) : 0;
   document.getElementById('score').innerText = 'Баллы: ' + score;
 
-  function addPoint() {
-    score++;
-    document.getElementById('score').innerText = 'Баллы: ' + score;
-    localStorage.setItem('score', score);
-  }
-
-  window.onbeforeunload = function() {
-    localStorage.setItem('score', score);
-  };
+  // Функция для добавления баллов и отправки данных на сервер
   function addPoint() {
     score++;
     document.getElementById('score').innerText = 'Баллы: ' + score;
     localStorage.setItem('score', score);
 
-    // Отправляем score на сервер, вот тут либо 2 / либо 1!!!
-    fetch('https://artura34.pythonanywhere.com//save_score', {
+    // Получаем telegram_id из localStorage
+    var telegramId = localStorage.getItem('telegram_id');
+    if (!telegramId) {
+      console.error('Telegram ID не найден. Пожалуйста, аутентифицируйтесь через Telegram бота.');
+      return;
+    }
+
+    // Отправляем score и telegram_id на сервер
+    fetch('https://artura34.pythonanywhere.com/save_score', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ telegram_id: 'telegram_id', score: score }),
+      body: JSON.stringify({ telegram_id: telegramId, score: score }),
     })
     .then(response => response.json())
     .then(data => {
@@ -72,6 +81,11 @@
       console.error('Error:', error);
     });
   }
+
+  // Сохраняем score при закрытии страницы
+  window.onbeforeunload = function() {
+    localStorage.setItem('score', score);
+  };
 </script>
 </body>
 </html>
