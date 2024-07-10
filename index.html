@@ -9,36 +9,158 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
-  }
-  .background {
+}
+.background {
     background-image: url('habitat.png');
-    height: 100%;
+    position: fixed; /* Фиксируем фон, чтобы он не прокручивался вместе со страницей */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-  }
-  .clicker {
+    z-index: -1; /* Устанавливаем фон под всеми другими элементами */
+}
+/* Добавляем z-index для элементов, которые должны быть поверх фона */
+.tab, .tabcontent, .clicker {
+    position: relative;
+    z-index: 1;
+}
+
+.tab {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    border: none;
+    background-color: #f1f1f1;
+}
+.tab button {
+    background-color: inherit;
+    float: left;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 10px;
+    width: 25%;
+    font-size: 17px;
+}
+.tab img {
+    cursor: pointer;
+    width: 15%; /* Или другой размер, который вам нужен */
+    padding: 10px;
+}
+
+.tab img:hover {
+    opacity: 0.8;
+}
+
+.tab button:hover {
+    background-color: #ddd;
+}
+.tab button.active {
+    background-color: #ccc;
+}
+.tabcontent {
+    padding-top: 50px; /* Добавлено место для вкладок внизу */
+    padding-bottom: 50px; /* Дополнительное пространство для удобства прокрутки */
+}
+/* Стили для вкладки Clicker */
+.clicker {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
-  }
-  .hippo-coin {
-    height: auto; /* Автоматический размер по высоте */
-    width: 90%; /* Ширина картинки в процентах для адаптивности */
-    max-width: 230px; /* Максимальная ширина картинки */
+    height: calc(100% - 100px); /* Учет высоты вкладок */
+}
+.hippo-coin {
+    height: auto;
+    width: 90%;
+    max-width: 230px;
     cursor: pointer;
+}
+  .buttons-container {
+  display: flex;
+  justify-content: center; /* Выравнивание кнопок по центру */
+  align-items: center; /* Центрирование кнопок по вертикали */
+  background-image: url('forbtn.png'); /* Убедитесь, что путь к изображению верный */
+  background-size: cover;
+  background-position: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 0; /* Отступ сверху и снизу */
+  z-index: 1; /* Убедитесь, что z-index выше, чем у других фиксированных элементов */
+}
+
+/* Обновите стили для .tablinks, если они вам нужны */
+.tablinks {
+  margin: 0 5px; /* Отступы между кнопками */
+  width: auto; /* Автоматический размер для сохранения пропорций */
+  max-width: 15%; /* Максимальный размер */
+}
+/* Медиа-запросы для мобильных устройств */
+@media (max-width: 768px) {
+  .energy-bar-container {
+    position: fixed;
+    bottom: 60px; /* Высота контейнера кнопок + отступ */
+    width: 100%;
+    z-index: 2; /* Чтобы было поверх кнопок */
   }
+
+  #energy-bar {
+    height: 30px;
+    width: 100%; /* Ширина шкалы энергии */
+    background-color: #4CAF50;
+  }
+}
+
 </style>
 </head>
 <body>
-<div class="background">
-  <div class="clicker">
-    <img src="hippo_coin.png" class="hippo-coin" onclick="addPoint()" alt="Hippo Coin">
+<div id="Clicker" class="tabcontent">
+  <div class="background">
+    <div class="clicker">
+      <img src="hippo_coin.png" class="hippo-coin" onclick="addPoint()" alt="Hippo Coin">
+    </div>
+    <div id="score" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; top: 20px;">Баллы: 0</div>
+    <div id="energy-bar" style="background-color: #4CAF50; height: 30px; width: 100%; position: absolute; bottom: 70px;"></div>
+    <div id="energy" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; bottom: 100px;">Энергия: 500</div>
   </div>
-  <div id="score" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; top: 20px;">Баллы: 0</div>
 </div>
+<!-- Другие вкладки... -->
+
+<!-- Обертка для кнопок с фоном -->
+<div class="buttons-container">
+  <img src="btn1.png" class="tablinks" onclick="openTab(event, 'Clicker')" alt="Clicker">
+  <img src="btn2.png" class="tablinks" onclick="openTab(event, 'Tasks')" alt="Tasks">
+  <img src="btn3.png" class="tablinks" onclick="openTab(event, 'Referrals')" alt="Referrals">
+  <img src="btn4.png" class="tablinks" onclick="openTab(event, 'Roadmap')" alt="Roadmap">
+</div>
+
 <script>
+
+function openTab(evt, tabName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(tabName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+
+// По умолчанию открываем первую вкладку
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementsByClassName('tablinks')[0].click();
+});
+
+// Весь ваш JavaScript код для игры и взаимодействия с сервером
+// ...
+
   // Извлекаем telegram_id из URL и сохраняем в localStorage
   document.addEventListener('DOMContentLoaded', function() {
     var urlParams = new URLSearchParams(window.location.search);
@@ -86,6 +208,92 @@ body, html {
   window.onbeforeunload = function() {
     localStorage.setItem('score', score);
   };
+  // Начальное значение энергии
+var energy = 100;
+
+// Функция для обновления шкалы энергии
+function updateEnergyBar() {
+  var energyBar = document.getElementById('energy-bar');
+  energyBar.style.width = energy + '%';
+  document.getElementById('energy').innerText = 'Энергия: ' + energy;
+}
+
+// Вызываем функцию updateEnergyBar при инициализации приложения
+document.addEventListener('DOMContentLoaded', updateEnergyBar);
+
+// Изменяем функцию addPoint для учета энергии
+function addPoint() {
+  if (energy > 0) {
+    score++;
+    energy--; // Уменьшаем энергию на 1 с каждым кликом
+    document.getElementById('score').innerText = 'Баллы: ' + score;
+    localStorage.setItem('score', score);
+    updateEnergyBar(); // Обновляем шкалу энергии
+
+    // Остальной код функции addPoint остается без изменений
+    // ...
+  } else {
+    console.log('Энергия закончилась. Клики не засчитываются.');
+  }
+}
+
+// Сохраняем энергию при закрытии страницы
+window.onbeforeunload = function() {
+  localStorage.setItem('energy', energy);
+};
+  // Начальное значение энергии
+var energy = 100;
+
+// Функция для обновления шкалы энергии
+function updateEnergyBar() {
+  var energyBar = document.getElementById('energy-bar');
+  energyBar.style.width = energy + '%';
+  document.getElementById('energy').innerText = 'Энергия: ' + energy;
+}
+
+// Функция для восстановления энергии
+function restoreEnergy() {
+  if (energy < 100) {
+    energy++;
+    updateEnergyBar();
+  }
+}
+
+// Устанавливаем интервал для восстановления энергии
+setInterval(restoreEnergy, 1000); // Восстанавливаем 1 единицу энергии каждую секунду
+
+// Вызываем функцию updateEnergyBar при инициализации приложения
+document.addEventListener('DOMContentLoaded', function() {
+  updateEnergyBar();
+  // Восстанавливаем значение энергии из localStorage, если оно там есть
+  var savedEnergy = localStorage.getItem('energy');
+  if (savedEnergy) {
+    energy = parseInt(savedEnergy);
+    updateEnergyBar();
+  }
+});
+
+// Изменяем функцию addPoint для учета энергии
+function addPoint() {
+  if (energy > 0) {
+    score++;
+    energy--; // Уменьшаем энергию на 1 с каждым кликом
+    document.getElementById('score').innerText = 'Баллы: ' + score;
+    localStorage.setItem('score', score);
+    updateEnergyBar(); // Обновляем шкалу энергии
+
+    // Остальной код функции addPoint остается без изменений
+    // ...
+  } else {
+    console.log('Энергия закончилась. Клики не засчитываются.');
+  }
+}
+
+// Сохраняем энергию при закрытии страницы
+window.onbeforeunload = function() {
+  localStorage.setItem('energy', energy);
+};
+
 </script>
 </body>
 </html>
