@@ -113,6 +113,13 @@ body, html {
     background-color: #4CAF50;
   }
 }
+.custom-background {
+    background-image: url('fon.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 
 </style>
 </head>
@@ -124,7 +131,7 @@ body, html {
     </div>
     <div id="score" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; top: 20px;">Баллы: 0</div>
     <div id="energy-bar" style="background-color: #4CAF50; height: 30px; width: 100%; position: absolute; bottom: 70px;"></div>
-    <div id="energy" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; bottom: 100px;">Энергия: 500</div>
+    <div id="energy" style="color: white; text-align: center; font-size: 2em; position: absolute; width: 100%; bottom: 100px;">Энергия: 100</div>
   </div>
 </div>
 <!-- Другие вкладки... -->
@@ -135,6 +142,28 @@ body, html {
   <img src="btn2.png" class="tablinks" onclick="openTab(event, 'Tasks')" alt="Tasks">
   <img src="btn3.png" class="tablinks" onclick="openTab(event, 'Referrals')" alt="Referrals">
   <img src="btn4.png" class="tablinks" onclick="openTab(event, 'Roadmap')" alt="Roadmap">
+</div>
+
+<div id="Tasks" class="tabcontent">
+  <body class="custom-background">
+  <!-- Содержимое страницы -->
+</body>
+<div class="buttons-container">
+  <img src="btn1.png" class="tablinks" onclick="openTab(event, 'Clicker')" alt="Clicker">
+  <img src="btn2.png" class="tablinks" onclick="openTab(event, 'Tasks')" alt="Tasks">
+  <img src="btn3.png" class="tablinks" onclick="openTab(event, 'Referrals')" alt="Referrals">
+  <img src="btn4.png" class="tablinks" onclick="openTab(event, 'Roadmap')" alt="Roadmap">
+</div>
+  <div class="task">
+    <h2>Первое задание: Подписка на телеграм-канал</h2>
+    <p>Чтобы начать зарабатывать баллы, подпишитесь на наш телеграм-канал.</p>
+    <!-- Ссылка для подписки на телеграм-канал -->
+    <a href="https://t.me/icebergcis" target="_blank" rel="noopener noreferrer">
+      <button>Подписаться</button>
+    </a>
+  </div>
+</div>
+  </div>
 </div>
 
 <script>
@@ -188,7 +217,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Отправляем score и telegram_id на сервер
-    fetch('https://artura34.pythonanywhere.com/save_score', {
+    fetch('https://artura34.pythonanywhere.com//save_score', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
